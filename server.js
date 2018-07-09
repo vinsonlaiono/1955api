@@ -23,16 +23,31 @@ app.get('/', function(req, res){
     })
 })
 app.get('/new/:name/', function(req, res){
-    
     var user = new User({name: req.params.name, created_at: new Date()})
     user.save(function(err){
         if(err){
             console.log("Error: " , err)
+        }else{res.redirect('/') }
+    });
+});
+app.get('/remove/:name/', function (req, res){
+    User.findOneAndRemove({name: req.params.name}, function(err, user){
+        if(err){
+            console.log("Error: ", err)
         }else{
-            res.redirect('/') 
+            res.redirect('/')            
         }
     })
+});
+app.get('/:name/', function (req, res){
+    User.findOne({name: req.params.name}, function(err, user){
+        if(err){
+            console.log("Error: ", err)
+        }else{
+            res.json(user)            
+        }
+    })
+});
 
-})
 
 
